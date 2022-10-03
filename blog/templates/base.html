@@ -153,11 +153,6 @@
       gsap.from('.navbar-brand, .nav-link', {duration: 0.9, ease: "power2.out", y: -60 });
       gsap.from('#hero-txt, .cats', {duration: 0.7, ease: "back.out(2.7)", opacity: 0, y: -60, delay: 1 });
 
-      {% comment %} let items = el.querySelectorAll(".post-div");
-      let animation = gsap.from(items, {duration: 0.8, ease: "power2.out", y: -60});
-      el.addEventListener("mouseover", () => animation.play());
-      el.addEventListener("mouseout", () => animation.reverse()); {% endcomment %}
-
       window.onload = function() {
           var tl = new TimelineMax({
             onComplete: function() {

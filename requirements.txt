@@ -18,6 +18,7 @@ pipenv==2022.5.2
 platformdirs==2.5.2
 psycopg2==2.9.3
 pylint==2.13.9
+python-decouple==3.6
 six==1.16.0
 sqlparse==0.4.2
 tomli==2.0.1

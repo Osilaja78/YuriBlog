@@ -2,22 +2,16 @@
 
 {% block content %}
 
-<!-- <h1>&nbsp; &nbsp; User Login</h1> -->
 <div class="form-group container" style="max-width: 200px; margin-top: 50px;">
     <h1 style="text-align: center;">Hello! Welcome back.</h1>
     <p>Please input your details.</p>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <!-- <small>Username</small>
-        <p>{{ form.username }}</p>
-        <small>Password</small>
-        <p>{{ form.password }}</p> -->
         <div style="text-align: center;">
             <a href=""><button type="submit" class="btn btn-primary">Login</button></a>
         </div>
     </form>
-    {% comment %} <small style="color: grey;">Note: Login is restricted to authorized personnel only.</small> {% endcomment %}
 </div>
 
 

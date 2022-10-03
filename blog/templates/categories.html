@@ -20,7 +20,6 @@
                 <div class="card-img-overlay" style="">
                     <a style="color: white;" href="{% url 'post_detail' post.pk %}"><h4 class="card-title">{{ post.title }} <small> - By: {{ post.author }}</small></h4></a>
                     <p class="card-text">{{ post.body|safe|slice:"100" }}...</p>
-                    {% comment %} <p class="card-text" style="background-color: grey; max-width: max-content; padding: 5px; border-radius: 5px;"><small>{{ post.category }}</small></p> {% endcomment %}
                     {% if user.is_authenticated %}
                         {% if user.id == post.author.id %}
                             <small><a style="color: white;" href="{% url 'post_update' post.pk %}">(Edit)</a></small>
