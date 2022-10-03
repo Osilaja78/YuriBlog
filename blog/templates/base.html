@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    
+    {% block title %}
+    
+        <title>YuriBlog</title> 
+    
+    {% endblock title %}
+    <style>
+      @media screen and (max-width: 700px) {
+        .sidebar {
+          display: none;
+        }
+        .featured, .post-deatil-sm {
+          flex-direction: column;
+        }
+        footer {
+          font-size: 13px;
+        }
+        .footer {
+            flex-direction: column;
+        }
+        .socials {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .profile {
+          flex-direction: column;
+        }
+        .profile_links {
+          display: flex;
+          justify-content: space-around;
+        }
+        h2 {
+          font-size: 20px;
+        }
+      }
+  </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 23px; font-family: cursive;">Yuri<span style="color: orange;">Blog</span></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'post_create'%}">Create Post</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'edit_info' %}">Edit Info</a>
+                </li>
+                {% if user.profile.id %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_profile' user.id %}">Profile</a>
+                  </li>
+                {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_profile' %}">Profile</a>
+                  </li>
+                {% endif %}
+                {% if category_menu %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Category
+                  </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li>
+                        {% for item in category_menu %}
+                          <a class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>
+                        {% endfor %}
+                      </li>
+                    </ul>
+                </li>
+                {% endif %}
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Category
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    {% for item in category_menu %}
+                      <a class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>
+                    {% endfor %}
+                  </li>
+                </ul>
+              </li>
+              {% endif %}
+              
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <div class="container" style="max-width: 100%; padding: 0;">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <footer>
+        <div class="bg-dark" style="padding: 30px; color: grey; margin-top: 60px; text-align: center; align-items: center;">
+            <div class="footer" style="display: flex; max-width: 80%; margin: 0 auto; justify-content: space-around;">
+                <div style="padding-bottom: 20px;">
+                    <a href="{% url 'home' %}" style="font-size: 30px; font-family: cursive; text-decoration: none; color: white;">Yuri<span style="color: orange;">Blog</span></a>
+                </div>
+                <div style="padding-right: 25px;">
+                    <ul style="list-style-type: none; line-height: 2rem;">
+                    <li><h3>Qiuck Links</h3></li>
+                    <li><a style="text-decoration: none; color: grey;" href="{% url 'home' %}">Home</a></li>
+                    <li><a style="text-decoration: none; color: grey;" href="#">Categories</a></li>
+                    <li><a style="text-decoration: none; color: grey;" href="#">Others</a></li>
+                    </ul>
+                </div>
+                <div style="padding-right: 25px;">
+                    <ul style="list-style-type: none;">
+                        <h3>Socials</h3>
+                        <div class="socials">
+                            <a href="https://twitter.com/AbdulOsilaja"><img src="https://img.icons8.com/doodle/344/twitter-circled.png" class="mx-auto d-block" alt="twitter" style="width: 30px; margin-top: 8px;"></a>
+                            <a href="https://instagram.com/osilajaabdulhameed"><img src="https://img.icons8.com/external-justicon-lineal-color-justicon/344/external-instagram-social-media-justicon-lineal-color-justicon.png" class="mx-auto d-block" alt="instagram" style="width: 30px; margin-top: 8px;"></a>
+                            <a href="https://facebook.com/osilajaabdulhameed1"><img src="https://img.icons8.com/doodle/344/facebook-new.png" class="mx-auto d-block" alt="facebook" style="width: 30px; margin-top: 8px;"></a>
+                            <a href="https://linkedin.com/osilajaabdulhameed"><img src="https://img.icons8.com/doodle/344/linkedin-circled.png" class="mx-auto d-block" alt="linkedin" style="width: 30px; margin-top: 8px;"></a>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 20px; background-color: black; text-align: center; width: 100%; color: white;">
+            <small> &copy; 2022 All Rights Reserved | Hameed Osilaja</small>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script>
+      gsap.from('.navbar-brand, .nav-link', {duration: 0.9, ease: "power2.out", y: -60 });
+      gsap.from('#hero-txt, .cats', {duration: 0.7, ease: "back.out(2.7)", opacity: 0, y: -60, delay: 1 });
+
+      {% comment %} let items = el.querySelectorAll(".post-div");
+      let animation = gsap.from(items, {duration: 0.8, ease: "power2.out", y: -60});
+      el.addEventListener("mouseover", () => animation.play());
+      el.addEventListener("mouseout", () => animation.reverse()); {% endcomment %}
+
+      window.onload = function() {
+          var tl = new TimelineMax({
+            onComplete: function() {
+              this.restart();
+            }
+          });
+          tl
+            .from("#fadetext1", 1, { autoAlpha: 0, delay: 1 })
+            .to("#fadetext1", 0.5, { autoAlpha: 0 })
+            .from("#fadetext2", 1, { autoAlpha: 0 })
+            .to("#fadetext2", 0.5, { autoAlpha: 0 })
+            .from("#fadetext3", 1, { autoAlpha: 0 })
+            .to("#fadetext3", 0.5, { autoAlpha: 0 })
+            .from("#fadetext4", 1, { autoAlpha: 0 })
+            .to("#fadetext4", 0.5, { autoAlpha: 0 })
+            .from("#fadetext5", 1, { autoAlpha: 0 })
+            .to("#fadetext5", 0.5, { autoAlpha: 0 })
+            .from("#fadetext6", 1, { autoAlpha: 0 })
+            .to("#fadetext6", 0.5, { autoAlpha: 0 });
+        };
+    </script>
+  </body>
+</html>

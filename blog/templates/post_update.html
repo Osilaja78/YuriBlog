@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<h1><span style="color: white;">---</span>Update Blog Post</h1>
+<hr>
+{% if user.id == post.author.id %}
+<div class="form-group container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <a href="{% url 'home' %}"><button type="submit" class="btn btn-primary">Update</button></a>
+        <a href=""><button type="botton" class="btn btn-danger" onclick="location.href='{% url 'home' %}'; return false; ">Cancel</button></a>
+    </form>
+</div>
+{% else %}
+    <h1>Error 404: the page you're looking for does not exist...</h1>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content%}
+
+<div class="hero" alt="hero-img" style="background-image: url(static/blog/images/hero_bg.jpg); background-repeat: no-repeat; background-position: center; background-size: cover; width: 100%; height: 460px;">
+    <h1 id="hero-txt" style="text-align: center; color: white; font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif; position: relative; top: 35%;">Welcome To Yuri<span style="color: orange;">Blog</span><br>Your Go-To Website For</h1>
+    <h2 id="fadetext1" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Trending News</h2>
+    <h2 id="fadetext2" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Sports</h2>
+    <h2 id="fadetext3" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Entertainment</h2>
+    <h2 id="fadetext4" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Celebrity Gist</h2>
+    <h2 id="fadetext5" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Recipe</h2>
+    <h2 id="fadetext6" class="subtext" style="text-align: center; color: white; position: absolute; padding-top: 155px; width: 100%; margin: auto;">Lifestyle</h2>
+</div>
+<hr>
+
+            {% comment %} FEATURED SECTION {% endcomment %}
+
+<h1 style="text-align: center; font-size: 50px;">Featured</h1>
+<ul style="list-style-type: none; display: flex; flex-wrap: wrap; padding-left: 0px; width: 95%; margin: 0 auto;">
+    {% for post in post_list %}
+        {% if post.category == "Featured" %}
+        <li class="post-div">
+            <div class="container" style="margin-bottom: 20px;  display: flex; flex-wrap: wrap;">
+                <div class="card text-bg-dark" style="margin: 5px; max-width: 580px; height: auto;">
+                    {% if post.images %}
+                        <img class="card-img" src="{{ post.images.url }}" alt="post-image">
+                    {% else %}
+                        <img src="{% static 'blog/images/62b9dc2d115c3.jpg' %}" class="card-img" alt="post-img">
+                    {% endif %}
+                    <div class="card-img-overlay">
+                        <a style="color: white; font-size: 10px;" href="{% url 'post_detail' post.pk %}"><h6 class="card-title">{{ post.title }}</h6></a>
+                        <p class="card-text">{{ post.body|slice:"100"|safe }} . . .</p>
+                        <p class="card-text" style="display: flex; align-items: center;">
+                            <small style="background-color: grey; max-width: max-content; padding: 5px; border-radius: 5px;"><a style="color: white; text-decoration: none;" href="{% url 'category' post.category %}">{{ post.category }}</a></small>
+                            <small>&nbsp;{{ post.publish }} </small>
+                            {% if user.is_authenticated %}
+                                {% if user.id == post.author.id %}
+                                    <small>&nbsp;&nbsp;<a style="color: white;" href="{% url 'post_update' post.pk %}">(Edit)</a></small>
+                                    <small>&nbsp;&nbsp;<a style="color: white;" href="{% url 'post_delete' post.pk %}">(Delete)</a></small><br>
+                                {% endif %}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+
+            {% comment %} FEATURED SECTION END {% endcomment %}
+
+                {% comment %} LATEST SECTION {% endcomment %}
+
+<h1 class="container" style="font-size: 45px;">Latest Posts</h1>
+<div class="featured" style="display: flex; width: 95%; margin: 0 auto;">
+    <ul class="" style="list-style-type: none; margin-bottom: 20px; display: flex; flex-wrap: wrap; padding-left: 0px;">
+        {% for post in post_list %}
+        {% comment %} {% if post.pk > 10 %} {% endcomment %}
+        <li>
+            <div  style="display: flex; flex-wrap: wrap;">
+                <div class="card text-bg-dark" style="margin: 20px; max-width: 380px; height: auto;">
+                    {% if post.images %}
+                        <img class="card-img" src="{{ post.images.url }}" alt="post-image">
+                    {% else %}
+                        <img src="{% static 'blog/images/62b9dc2d115c3.jpg' %}" class="card-img" alt="post-img">
+                    {% endif %}
+                    <div class="card-img-overlay">
+                        <a style="color: white;" href="{% url 'post_detail' post.pk %}"><h6 class="card-title">{{ post.title }}</h6></a>
+                        <p class="card-text">{{ post.body|safe|slice:"100" }}. . .</p>
+                        <p class="card-text" style="display: flex; align-items: center;">
+                            <small style="background-color: grey; max-width: max-content; padding: 5px; border-radius: 5px;"><a style="color: white; text-decoration: none;" href="{% url 'category' post.category %}">{{ post.category }}</a></small>
+                            <small>&nbsp;{{ post.publish }}</small>
+                            {% if user.is_authenticated %}
+                                {% if user.id == post.author.id %}
+                                    <small>&nbsp;&nbsp;<a style="color: white;" href="{% url 'post_update' post.pk %}">(Edit)</a></small>
+                                    <small>&nbsp;&nbsp;<a style="color: white;" href="{% url 'post_delete' post.pk %}">(Delete)</a></small><br>
+                                {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+
+                    {% comment %} SIDEBAR {% endcomment %}
+
+    <div class="sidebar2 container" style="margin: 0 auto; max-width: 410px;">
+        <h2 style="text-align: center;">Recommended</h2>
+        {% for post in post_list %}
+            {% if post.category == "Random" %}
+            <div class="side-content" style="display: flex;">
+                {% if post.images %}
+                    <img style="width: 100px; max-height: 100px; margin: 10px;" src="{{ post.images.url }}" alt="post-img">
+                {% else %}
+                    <img style="width: 100px; max-height: 100px; margin: 10px;" src="{% static 'blog/images/62b9dc2d115c3.jpg' %}" class="card-img" alt="post-img">
+                {% endif %}
+                <div style="margin: 10px;">
+                    <a style="text-decoration: none; color: black;" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                </div>
+            </div>
+            <br>
+            {% endif %}
+        {% endfor %}
+
+        {% comment %} CATEGORIES CARD {% endcomment %}
+
+        <div class="card" style="width: 18rem; margin: auto;">
+            <div class="card-header">
+                Categories
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    {% for item in category_menu %}
+                      <a style="margin: 10px;" class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>
+                    {% endfor %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% comment %} <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+</div>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+      Featured
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Cras justo odio</li>
+      <li class="list-group-item">Dapibus ac facilisis in</li>
+      <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
+</div> {% endcomment %}
+
+                {% comment %} LATEST SECTION END {% endcomment %}
+<br>
+<br>
+<h1 class="container">Most Read Category</h1>
+<ul class="container" style="list-style-type: none; display: flex; flex-wrap: wrap;">
+    {% for post in post_list %}
+    {% if post.category == "Sports" %}
+        <li>
+            <div style="width: 18rem; margin: 10px;">
+                {% if post.images %}
+                    <img class="card-img-top" src="{{ post.images.url }}" alt="post-img">
+                {% else %}
+                    <img class="card-img-top" src="{% static 'blog/images/62b9dc2d115c3.jpg' %}" alt="post-img">
+                {% endif %}
+                <div class="card-body">
+                    <a style="color: black; text-decoration: none;" href="{% url 'post_detail' post.pk %}"><h4>{{ post.title }}</h4></a>
+                    <p class="card-text">{{ post.body|safe|slice:"100" }}. . .</p>
+                    <small style="background-color: yellow; max-width: max-content; padding: 5px; border-radius: 5px;"><a style="color: black; text-decoration: none;" href="{% url 'category' post.category %}">{{ post.category }}</a></small>
+                </div>
+            </div>
+        </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
+

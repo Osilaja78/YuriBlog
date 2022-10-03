@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1><span style="color: white;">---</span>Update User Info</h1>
+<hr>
+<div class="form-group container" style="max-width: 600px;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><a href="{% url 'update_password' %}">Change Password</a></p>
+        <a href=""><button type="submit" class="btn btn-primary">Register</button></a>
+    </form>
+</div>
+{% else %}
+    <p>Error 404: the page you're looking for does not exist...</p>
+{% endif %}
+
+
+{% endblock %}

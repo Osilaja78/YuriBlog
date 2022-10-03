@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+
+<h1>&nbsp; &nbsp; User Profile</h1>
+<hr>
+{% if current_user.profile_pic %}
+<div class="card bg-success container" style="max-width: 80%; margin: 0 auto;">
+    <div class="card-body profile"style="display: flex;">
+        <div class="p-2">
+            <img src="{{ current_user.profile_pic.url }}" alt="profile" class="mx-auto d-block" style="width: 200px; height: auto; margin-bottom: 20px; border: 3px solid yellow; border-radius: 150px; background-color: rgb(219, 37, 37);">
+            <p style="color: white; text-align: center; font-size: 35px;">{{ current_user.user.first_name }} {{ current_user.user.last_name }}</p>
+            <small><p style="color: white; text-align: center;">{{ current_user.user.email }}</p></small>
+            <p style="color: white; text-align: center;">{{ current_user.bio }}</p>
+            {% if user.is_authenticated %}
+                {% if user.id == current_user.id %}
+                <button class="btn btn-primary btn-sm">
+                    <a href="{% url 'edit_profile' current_user.user.id %}" style="color: white; text-align: center;">Edit Profile</a>
+                </button>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="vr"></div>
+        <div class="p-2 profile_links justify-content-between" style="margin-left: 10px; background-color: rgba(255, 255, 255, 0.699); border-radius: 20px;">
+            <a href="{{ current_user.twitter_url }}"><img src="https://img.icons8.com/ios-filled/2x/twitter-circled.png" class="mx-auto d-block" alt="twitter" style="width: 25px; "></a><br>
+            <img src="https://img.icons8.com/ios-filled/72/instagram-new--v1.png" class="mx-auto d-block" alt="instagram" style="width: 25px;"><br>
+            <img src="https://img.icons8.com/ios-filled/72/facebook-new.png" class="mx-auto d-block" alt="facebook" style="width: 25px;"><br>
+            <img src="https://img.icons8.com/ios-filled/2x/linkedin-circled.png" class="mx-auto d-block" alt="linkedin" style="width: 25px;"><br>
+        </div>
+</div>
+</div>
+<br>
+<br>
+<br>
+{% else %}
+<div class="card bg-success">
+    <div class="card-body">
+        <div class="d-flex flex-row">
+            <div class="p-2">
+                <img src="{% static 'blog/images/default_profile.jpg' %}" alt="profile" class="mx-auto d-block" style="width: 200px; height: auto; margin-bottom: 20px; border: 2px solid yellow; border-radius: 150px;">
+                <p style="color: white; text-align: center; font-size: 35px;">{{ current_user.user.first_name }} {{ current_user.user.last_name }}</p>
+                <small><p style="color: white; text-align: center;">{{ current_user.user.email }}</p></small>
+                <p style="color: white; text-align: center;">{{ current_user.bio }}</p>
+                {% if user.is_authenticated %}
+                    <button class="btn btn-primary btn-sm">
+                        <a href="{% url 'edit_profile' current_user.user.id %}" style="color: white; text-align: center;">Edit Profile</a>
+                    </button>
+                {% endif %}
+            </div>
+            <div class="vr"></div>
+            <div class="p-2 justify-content-between" style="margin-left: 10px; background-color: rgba(255, 255, 255, 0.699); border-radius: 20px;">
+                <a href="{{ current_user.twitter_url }}"><img src="https://img.icons8.com/ios-filled/2x/twitter-circled.png" class="mx-auto d-block" alt="twitter" style="width: 25px;"></a><br>
+                <img src="https://img.icons8.com/ios-filled/72/instagram-new--v1.png" class="mx-auto d-block" alt="instagram" style="width: 25px;"><br>
+                <img src="https://img.icons8.com/ios-filled/72/facebook-new.png" class="mx-auto d-block" alt="facebook" style="width: 25px;"><br>
+                <img src="https://img.icons8.com/ios-filled/2x/linkedin-circled.png" class="mx-auto d-block" alt="linkedin" style="width: 25px;"><br>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+{% endif %}
+
+{% endblock %}

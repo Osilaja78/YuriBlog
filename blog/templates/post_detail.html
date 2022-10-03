@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+    {% if post.images %}
+        <div alt="hero-img" style="background-image: url({{ post.images.url }}); background-blend-mode: darken; margin-bottom: 30px; background-repeat: no-repeat; background-position: center; background-size: cover; width: 100%; height: 200px;">
+            <h1 style="color: white; padding: 40px;">{{ post.title }}</h1>
+            <small style="color: white; padding-left: 40px;">By: {{ post.author }} - {{ post.publish }}</small>
+        </div>
+    {% else %}
+        <div alt="hero-img" style="background-image: url(../static/blog/images/digital-grid-bg.jpg); background-blend-mode: darken; margin-bottom: 30px; background-repeat: no-repeat; background-position: center; background-size: cover; width: 100%; height: 300px;">
+            <h1 style="color: white; padding: 40px;">{{ post.title }}</h1>
+            <small style="color: white; padding-left: 40px;">By: {{ post.author }} - {{ post.publish }}</small>
+        </div>
+    {% endif %}
+<div style="width: 90%; margin: 0 auto;">
+    <div>
+        {% if post.images %}
+        <div class="post-detail-img" style="width: 40%; margin: 0 auto;">
+            <img src="{{ post.images.url }}" alt="post-image" style="max-width: 100%; margin: 0 auto;">
+        </div>
+        {% endif %}
+        <br>
+        <br>
+        <div class="post-deatil-sm" style="display: flex; justify-content: space-between;">
+            <div>
+                {{ post.body|safe }}
+                <small>Category - <a style="color: grey; text-decoration: none;" href="{% url 'category' post.category %}">{{ post.category }}</a></small><br>
+                <br>
+                <br>
+                {% if user.id == post.author.id %}
+                    <small><a href="{% url 'post_update' post.pk %}">(Edit)</a></small>
+                    <small><a href="{% url 'post_delete' post.pk %}">(Delete)</a></small><br>
+                    <br>
+                {% endif %}
+                <a href="{% url 'home' %}"><button type="button" class="btn btn-dark">Back</button></a>
+                <br>
+                <hr>
+                <br>
+                <form action="{% url 'like_post' post.pk %}" method="POST">
+                    {% if user.is_authenticated %}
+                        {% csrf_token %}
+                        {% if liked %}
+                            <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-danger btn-sm">Unlike</button>
+                                {% if total_likes <= 1 %}
+                                    <small style="color: grey;">{{ total_likes }} Like</small>
+                                {% else %}
+                                    <small style="color: grey;">{{ total_likes }} Likes</small>
+                                {% endif %}
+                        {% else %}
+                            <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-primary btn-sm">Like</button><small style="color: grey;"> {{ total_likes }} Likes</small>
+                        {% endif %}
+                    {% else %}
+                    <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-primary btn-sm disabled">Like</button>
+                    {% if total_likes <= 1 %}
+                        <small style="color: grey;">{{ total_likes }} Like - Login to like post</small>
+                    {% else %}
+                        <small style="color: grey;">{{ total_likes }} Likes - Login to like post</small>
+                    {% endif %}
+                    {% endif %}
+                </form>
+                <hr>
+                {% if not post.comments.all %}
+                    Add a comment...
+                {% else %}
+                    {% for comment in post.comments.all %}
+                    <h2>Comments.</h2>
+                        <p>{{ comment.name }} - {{ comment.date_added }}</p>
+                        <small>{{ comment.body }}</small>
+                    {% endfor %}
+                {% endif %}
+            
+                <a href="{% url 'add_comment' post.pk %}"><h3>Add comment</h3></a>
+                <br>
+            </div>
+            <br>
+            <div class="sidebar2 container" style="margin: 0 auto;max-width: 410px;">
+                <h2 style="text-align: center;">Recommended</h2>
+                {% for post in post_list %}
+                    {% if post.category == "Random" %}
+                    <div class="side-content" style="display: flex;">
+                        {% if post.images %}
+                            <img style="width: 100px; max-height: 100px; margin: 10px;" src="{{ post.images.url }}" alt="post-img">
+                        {% else %}
+                            <img style="width: 100px; max-height: 100px; margin: 10px;" src="{% static 'blog/images/62b9dc2d115c3.jpg' %}" class="card-img" alt="post-img">
+                        {% endif %}
+                        <div style="margin: 10px;">
+                            <a style="text-decoration: none; color: black;" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                        </div>
+                    </div>
+                    <br>
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="card" style="width: 18rem; margin: auto;">
+                    <div class="card-header">
+                        Categories
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            {% for item in category_menu %}
+                              <a style="margin: 10px;" class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <hr>
+    {% if post.author.profile.profile_pic %}
+    <div style="width: 100%;">
+        <div class="card" style="width: 200px; margin: 0 auto;">
+            <img src="{{ post.author.profile.profile_pic.url }}" class="card-img-top" alt="profile" >
+            <div class="card-body">
+                <a href="{% url 'user_profile' post.author.id %}"><small ><p class="card-text" style="color: grey; font-size: 20px; margin-bottom: 10px;">{{ post.author.first_name }} {{ post.author.last_name }}</p></small></a>
+                <p class="card-text">{{ post.author.profile.bio|slice:"150" }}...</p>
+                <hr>
+                <img src="https://img.icons8.com/ios-filled/2x/twitter-circled.png" class="card-img-bottom" alt="twitter" style="width: 25px;">
+                <img src="https://img.icons8.com/ios-filled/72/instagram-new--v1.png" class="card-img-bottom" alt="instagram" style="width: 25px;">
+                <img src="https://img.icons8.com/ios-filled/72/facebook-new.png" class="card-img-bottom" alt="facebook" style="width: 25px;">
+                <img src="https://img.icons8.com/ios-filled/2x/linkedin-circled.png" class="card-img-bottom" alt="linkedin" style="width: 25px;">
+            </div>
+        </div>
+    </div>
+        
+    {% else %}
+    <div style="width: 100%;">
+        <div class="card" style="width: 200px; margin: 0 auto;">
+            <img src="{% static 'blog/images/default_profile.jpg' %}" class="card-img-top" alt="profile" style="width: 200px; height: 200px;">
+            <div class="card-body">
+                <small ><p class="card-text" style="color: grey; font-size: 20px; margin-bottom: 10px;">{{ post.author.first_name }} {{ post.author.last_name }}</p></small>
+            <p class="card-text">{{ post.author.profile.bio|slice:"150" }}...</p>
+            <img src="https://img.icons8.com/ios-filled/2x/twitter-circled.png" class="card-img-bottom" alt="twitter" style="width: 25px;">
+            <img src="https://img.icons8.com/ios-filled/72/instagram-new--v1.png" class="card-img-bottom" alt="instgram" style="width: 25px;">
+            <img src="https://img.icons8.com/ios-filled/72/facebook-new.png" class="card-img-bottom" alt="facebook" style="width: 25px;">
+            <img src="https://img.icons8.com/ios-filled/2x/linkedin-circled.png" class="card-img-bottom" alt="linkedin" style="width: 25px;">
+            </div>
+        </div>
+    </div>
+    
+    {% endif %}
+
+    {% comment %} <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="text" id="comment" value="{{ add_comment }}">
+            <a href="{% url 'home' %}"><button type="submit" class="btn btn-primary">Post</button></a>
+        </form>
+    </div> {% endcomment %}
+</div>
+{% endblock %}

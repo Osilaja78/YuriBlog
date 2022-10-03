@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% if user.id == profile.user.id %}
+        <h1><span style="color: white;">---</span>Edit User Profile</h1>
+        <hr>
+        <div class="form-group container" style="max-width: 600px;">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <a href=""><button type="submit" class="btn btn-primary">Update</button></a>
+            </form>
+        </div>
+    {% else %}
+        <p>Error 404: the page you're looking for does not exist...</p>
+    {% endif %}
+{% else %}
+    <p>Error 404: the page you're looking for does not exist...</p>
+{% endif %}
+
+{% endblock %}
